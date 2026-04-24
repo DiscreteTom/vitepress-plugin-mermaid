@@ -12,6 +12,7 @@ interface MermaidPluginOptions extends MermaidConfig {
 // Additional configuration for plugin itself. Separate model, not to risk name conflicts with future MermaidConfig options
 export interface MermaidPluginConfig {
   class?: string;
+  output?: 'svg' | 'img';
 }
 
 const DEFAULT_OPTIONS: MermaidConfig = {

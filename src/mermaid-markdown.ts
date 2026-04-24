@@ -8,12 +8,13 @@ export const MermaidMarkdown = (md, pluginOptions) => {
       try {
         const key = index;
         const cssClass = pluginOptions?.class || 'mermaid';
+        const output = pluginOptions?.output || 'svg';
         return `
       <Suspense> 
       <template #default>
       <Mermaid id="mermaid-${key}" class="${cssClass}" graph="${encodeURIComponent(
           token.content
-        )}"></Mermaid>
+        )}" output="${output}"></Mermaid>
       </template>
         <!-- loading state via #fallback slot -->
         <template #fallback>

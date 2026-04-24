@@ -1,5 +1,8 @@
 <template>
-  <div v-html="svg" :class="props.class"></div>
+  <div :class="props.class">
+    <img v-if="props.output === 'img'" :src="imgSrc" />
+    <div v-else v-html="svg"></div>
+  </div>
 </template>
 
 <script setup>
@@ -31,10 +34,16 @@ const props = defineProps({
     type: String,
     required: false,
     default: "mermaid",
+  },
+  output: {
+    type: String,
+    required: false,
+    default: "svg",
   }
 });
 
 const svg = ref(null);
+const imgSrc = ref(null);
 let mut = null;
 
 onMounted(async () => {
@@ -86,12 +95,16 @@ const renderChart = async () => {
     decodeURIComponent(props.graph),
     mermaidConfig
   );
-  // This is a hack to force v-html to re-render, otherwise the diagram disappears
-  // when **switching themes** or **reloading the page**.
-  // The cause is that the diagram is deleted during rendering (out of Vue's knowledge).
-  // Because svgCode does NOT change, v-html does not re-render.
-  // This is not required for all diagrams, but it is required for c4c, mindmap and zenuml.
-  const salt = Math.random().toString(36).substring(7);
-  svg.value = `${svgCode} <span style="display: none">${salt}</span>`;
+  if (props.output === 'img') {
+    imgSrc.value = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgCode)))}`;
+  } else {
+    // This is a hack to force v-html to re-render, otherwise the diagram disappears
+    // when **switching themes** or **reloading the page**.
+    // The cause is that the diagram is deleted during rendering (out of Vue's knowledge).
+    // Because svgCode does NOT change, v-html does not re-render.
+    // This is not required for all diagrams, but it is required for c4c, mindmap and zenuml.
+    const salt = Math.random().toString(36).substring(7);
+    svg.value = `${svgCode} <span style="display: none">${salt}</span>`;
+  }
 };
 </script>
