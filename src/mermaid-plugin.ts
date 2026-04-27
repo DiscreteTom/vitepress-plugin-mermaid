@@ -41,7 +41,7 @@ export function MermaidPlugin(
       //Register Mermaid component in vue instance creation
       if (id.includes("vitepress/dist/client/app/index.js")) {
         src =
-          "\nimport Mermaid from 'vitepress-plugin-mermaid/Mermaid.vue';\n" +
+          "\nimport Mermaid from '@discretetom/vitepress-plugin-mermaid/Mermaid.vue';\n" +
           src;
 
         const lines = src.split("\n");
